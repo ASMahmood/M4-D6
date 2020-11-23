@@ -21,6 +21,7 @@ class App extends React.Component {
   };
   onSelect = (selectedMovie) => {
     this.setState({ selected: selectedMovie });
+    console.log(this.state.selected);
   };
 
   render() {
@@ -29,7 +30,7 @@ class App extends React.Component {
         <NavBar onSearch={this.onSearch} />
 
         <Container fluid className="px-5 mt-5">
-          <CommentArea bookId={this.state.selected.imdbID} />
+          <CommentArea movieId={this.state.selected} />
           <DynamicGallery
             onSelect={this.onSelect}
             searchQuery={this.state.query}

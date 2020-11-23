@@ -11,7 +11,7 @@ class CommentList extends React.Component {
   fetchComments = async () => {
     try {
       let response = await fetch(
-        `https://striveschool-api.herokuapp.com/api/comments/${this.props.bookId}`,
+        `https://striveschool-api.herokuapp.com/api/comments/${this.props.movieId}`,
         {
           headers: {
             Authorization:
@@ -33,7 +33,7 @@ class CommentList extends React.Component {
   };
 
   componentDidUpdate = (previousProps) => {
-    if (previousProps.bookId !== this.props.bookId) {
+    if (previousProps.movieId !== this.props.movieId) {
       this.fetchComments();
     }
   };

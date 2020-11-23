@@ -19,16 +19,16 @@ class AddComment extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props.bookId);
+    console.log(this.props.movieId);
   };
 
   componentDidUpdate = (previousProps) => {
-    if (previousProps.bookId !== this.state.comment.elementId) {
+    if (previousProps.movieId !== this.state.comment.elementId) {
       this.setState({
         comment: {
           comment: "",
           rate: 3,
-          elementId: this.props.bookId,
+          elementId: this.props.movieId,
         },
       });
       console.log(this.state.comment);
@@ -57,7 +57,7 @@ class AddComment extends React.Component {
           comment: {
             comment: "",
             rate: 3,
-            elementId: this.props.bookId,
+            elementId: this.props.movieId,
           },
         });
       } else {

@@ -9,12 +9,12 @@ class CommentArea extends React.Component {
       <Container id="commentArea">
         <Row>
           <Col xs={6} className="offset-3">
-            <img src={this.props.bookImg} alt="" width="100%" />
+            <h2>{this.props.movieId.Title}</h2>
           </Col>
         </Row>
         <Row>
-          <CommentList bookId={this.props.bookId} />
-          <AddComment bookId={this.props.bookId} />
+          <CommentList movieId={this.props.movieId.imdbID} />
+          <AddComment movieId={this.props.movieId.imdbID} />
         </Row>
       </Container>
     );
