@@ -1,0 +1,6 @@
+.container#commentArea {
+  left: 0;
+  width: 18vw;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0 50px 50px 0;
+}
