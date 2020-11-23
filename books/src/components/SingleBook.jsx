@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import CommentArea from "./CommentArea";
+
 import "./SingleBook.css";
 
 class SingleBook extends React.Component {
@@ -11,8 +11,10 @@ class SingleBook extends React.Component {
   toggleSelected = () => {
     if (this.state.selected === false) {
       this.setState({ selected: true });
+      this.props.onSelect(this.props.book);
     } else {
       this.setState({ selected: false });
+      this.props.onSelect({});
     }
   };
 
@@ -34,15 +36,6 @@ class SingleBook extends React.Component {
             <Card.Text>${this.props.book.price}</Card.Text>
           </Card.Body>
         </Card>
-        <CommentArea
-          className={
-            this.state.selected === true
-              ? "position-fixed"
-              : "position-fixed d-none"
-          }
-          bookId={this.props.book.asin}
-          bookImg={this.props.book.img}
-        />
       </>
     );
   }

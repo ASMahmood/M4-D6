@@ -7,7 +7,7 @@ import "./CommentArea.css";
 class CommentArea extends React.Component {
   render() {
     return (
-      <Container id="commentArea" className={this.props.className}>
+      <Container id="commentArea">
         <Row>
           <Col xs={6} className="offset-3">
             <img src={this.props.bookImg} alt="" width="100%" />

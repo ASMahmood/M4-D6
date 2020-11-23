@@ -18,8 +18,26 @@ class AddComment extends React.Component {
     this.setState({ comment: comment });
   };
 
+  componentDidMount = () => {
+    console.log(this.props.bookId);
+  };
+
+  componentDidUpdate = (previousProps) => {
+    if (previousProps.bookId !== this.state.comment.elementId) {
+      this.setState({
+        comment: {
+          comment: "",
+          rate: 3,
+          elementId: this.props.bookId,
+        },
+      });
+      console.log(this.state.comment);
+    }
+  };
+
   submitComment = async (e) => {
     e.preventDefault();
+    console.log(this.state.comment.elementId);
     try {
       let response = await fetch(
         "https://striveschool-api.herokuapp.com/api/comments/",

@@ -8,7 +8,7 @@ class CommentList extends React.Component {
     loading: true,
   };
 
-  componentDidMount = async () => {
+  fetchComments = async () => {
     try {
       let response = await fetch(
         `https://striveschool-api.herokuapp.com/api/comments/${this.props.bookId}`,
@@ -24,6 +24,17 @@ class CommentList extends React.Component {
     } catch (e) {
       console.log(e);
       this.setState({ loading: false });
+    }
+  };
+
+  componentDidMount = () => {
+    this.fetchComments();
+    console.log("fetching comments");
+  };
+
+  componentDidUpdate = (previousProps) => {
+    if (previousProps.bookId !== this.props.bookId) {
+      this.fetchComments();
     }
   };
 

@@ -1,10 +1,12 @@
 import React from "react";
 import SingleBook from "./SingleBook";
+import CommentArea from "./CommentArea";
 import { Form, Container, Row, Col } from "react-bootstrap";
 
 class BookList extends React.Component {
   state = {
     booklist: this.props.arr,
+    selected: {},
   };
 
   filterBookList = (input) => {
@@ -14,14 +16,20 @@ class BookList extends React.Component {
       ),
     });
   };
+  onSelect = (selectedBook) => {
+    this.setState({ selected: selectedBook });
+  };
+
+  componentDidUpdate = (previousProps, previousState) => {
+    if (previousState.selected !== this.props.selected) {
+      console.log("AFTER BOOKLIST UPDATE", this.state.selected);
+    }
+  };
 
   render() {
     return (
       <>
-        <Container style={{ maxWidth: "60%" }}>
-          <Row>
-            <Col></Col>
-          </Row>
+        <Container>
           <Row>
             <Col>
               <Form>
@@ -36,9 +44,23 @@ class BookList extends React.Component {
             </Col>
           </Row>
           <Row>
-            {this.state.booklist.map((item) => (
-              <SingleBook book={item} key={item.asin} />
-            ))}
+            <Col md={9}>
+              <Row>
+                {this.state.booklist.map((item) => (
+                  <SingleBook
+                    onSelect={this.onSelect}
+                    book={item}
+                    key={item.asin}
+                  />
+                ))}
+              </Row>
+            </Col>
+            <Col md={3}>
+              <CommentArea
+                bookId={this.state.selected.asin}
+                bookImg={this.state.selected.img}
+              />
+            </Col>
           </Row>
         </Container>
       </>
