@@ -113,7 +113,7 @@ class DynamicGallery extends React.Component {
     if (this.state.movieArray) {
       if (this.state.loading === true) {
         return (
-          <div>
+          <div className="d-flex">
             <h3>Loading...</h3>
             <Spinner animation="border" role="status">
               <span className="sr-only">Loading...</span>
@@ -130,7 +130,11 @@ class DynamicGallery extends React.Component {
             {this.state.movieArray.length > 0 && (
               <OwlCarousel margin={10}>
                 {this.state.movieArray.map((movie, index) => (
-                  <div className="item" key={index}>
+                  <div
+                    className="item"
+                    key={index}
+                    onClick={() => this.props.onSelect(movie)}
+                  >
                     <img src={movie.Poster} alt="" />
                   </div>
                 ))}

@@ -4,7 +4,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DynamicGallery from "./components/DynamicGallery";
 import NavBar from "./components/NavBar";
-
+import CommentArea from "./components/CommentArea";
 import Footer from "./components/Footer";
 import { Container } from "react-bootstrap";
 import FixedGallery from "./components/FixedGallery";
@@ -13,10 +13,14 @@ class App extends React.Component {
   state = {
     query: "marvel",
     loading: true,
+    selected: {},
   };
   onSearch = (searchQuery) => {
     this.setState({ query: searchQuery });
     console.log("QUERY IN APP.JS", this.state.query);
+  };
+  onSelect = (selectedMovie) => {
+    this.setState({ selected: selectedMovie });
   };
 
   render() {
@@ -25,7 +29,11 @@ class App extends React.Component {
         <NavBar onSearch={this.onSearch} />
 
         <Container fluid className="px-5 mt-5">
-          <DynamicGallery searchQuery={this.state.query} />
+          <CommentArea bookId={this.state.selected.imdbID} />
+          <DynamicGallery
+            onSelect={this.onSelect}
+            searchQuery={this.state.query}
+          />
           <FixedGallery
             loadingstate={this.state.loading}
             searchQuery="harry potter"
