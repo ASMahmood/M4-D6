@@ -11,40 +11,21 @@ import FixedGallery from "./components/FixedGallery";
 
 class App extends React.Component {
   state = {
-    movieArray: [],
     query: "marvel",
     loading: true,
   };
-  componentDidMount() {
-    this.fetchMovies("marvel");
-  }
   onSearch = (searchQuery) => {
-    this.fetchMovies(searchQuery);
     this.setState({ query: searchQuery });
+    console.log("QUERY IN APP.JS", this.state.query);
   };
-  fetchMovies = async (query) => {
-    try {
-      let response = await fetch(
-        `http://www.omdbapi.com/?apikey=1846c79&s=${query}`
-      );
-      let paresdResponse = await response.json();
-      let movieArray = paresdResponse.Search;
-      this.setState({ movieArray: movieArray, loading: false });
-    } catch (e) {
-      console.log(e);
-      this.setState({ loading: false });
-    }
-  };
+
   render() {
     return (
       <div className="App">
         <NavBar onSearch={this.onSearch} />
 
         <Container fluid className="px-5 mt-5">
-          <DynamicGallery
-            searchQuery={this.state.query}
-            movieArray={this.state.movieArray}
-          />
+          <DynamicGallery searchQuery={this.state.query} />
           <FixedGallery
             loadingstate={this.state.loading}
             searchQuery="harry potter"

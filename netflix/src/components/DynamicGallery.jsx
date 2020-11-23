@@ -1,19 +1,36 @@
 import React from "react";
-import SingleCarousel from "./SingleCarousel";
+
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import OwlCarousel from "react-owl-carousel";
-import { Divider } from "@material-ui/core";
+
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 
 class DynamicGallery extends React.Component {
   state = {
+    loading: true,
+    movieArray: [],
     show: false,
     comment: {
       comment: "",
       rate: 3,
       elementId: "",
     },
+  };
+
+  componentDidMount() {
+    console.log("QUERY IN GALLERY ON MOUNT", this.props.searchQuery);
+    this.fetchMovie();
+  }
+
+  componentDidUpdate = (previousProps, previousState) => {
+    console.log("QUERY RECIEVED BY GALLERY", this.props.searchQuery);
+
+    if (previousProps.searchQuery !== this.props.searchQuery) {
+      console.log("QUERY IN GALLERY ON UPDATE", this.props.searchQuery);
+      this.setState({ loading: true });
+      this.fetchMovie();
+    }
   };
 
   handleSubmit = async (id) => {
@@ -51,12 +68,14 @@ class DynamicGallery extends React.Component {
       console.log(e);
     }
   };
+
   updateCommentField = (e) => {
     let comment = { ...this.state.comment };
     let currentId = e.currentTarget.id;
     comment[currentId] = e.currentTarget.value;
     this.setState({ comment: comment });
   };
+
   fetchComments = async (id) => {
     this.setState({ show: true });
     try {
@@ -73,9 +92,26 @@ class DynamicGallery extends React.Component {
       console.log(comments);
     } catch (e) {}
   };
+
+  fetchMovie = async () => {
+    try {
+      let response = await fetch(
+        `http://www.omdbapi.com/?apikey=1846c79&s=${this.props.searchQuery}`
+      );
+      let paresdResponse = await response.json();
+      setTimeout(() => {
+        this.setState({ movieArray: paresdResponse.Search });
+        this.setState({ loading: false });
+      }, 1000);
+      console.log(this.state.movieArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
-    if (this.props.movieArray) {
-      if (this.props.loading === true) {
+    if (this.state.movieArray) {
+      if (this.state.loading === true) {
         return (
           <div>
             <h3>Loading...</h3>
@@ -88,80 +124,14 @@ class DynamicGallery extends React.Component {
         return (
           <>
             <h2 className="align-self-start">
-              First {this.props.movieArray.length} results for:{" "}
+              First {this.state.movieArray.length} results for:{" "}
               {this.props.searchQuery}
             </h2>
-            {this.props.movieArray.length > 0 && (
+            {this.state.movieArray.length > 0 && (
               <OwlCarousel margin={10}>
-                {this.props.movieArray.map((movie) => (
-                  <div className="item">
+                {this.state.movieArray.map((movie, index) => (
+                  <div className="item" key={index}>
                     <img src={movie.Poster} alt="" />
-                    <Button
-                      variant="primary"
-                      onClick={() => this.fetchComments(movie.imdbID)}
-                    >
-                      Launch demo modal
-                    </Button>
-                    <Modal
-                      show={this.state.show}
-                      onHide={() => this.setState({ show: false })}
-                    >
-                      <Modal.Dialog>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Comment</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                          <Form.Group>
-                            <Form.Group>
-                              <Form.Label htmlFor="comment">
-                                Comment:
-                              </Form.Label>
-                              <Form.Control
-                                as="textarea"
-                                name="comment"
-                                id="comment"
-                                placeholder="What did you think?"
-                                value={this.state.comment.comment}
-                                onChange={this.updateCommentField}
-                                required
-                              />
-                            </Form.Group>
-                            <br />
-                            <Form.Group>
-                              <Form.Label htmlFor="rate">Rating:</Form.Label>
-                              <Form.Control
-                                as="select"
-                                name="rate"
-                                id="rate"
-                                value={this.state.comment.rate}
-                                onChange={this.updateCommentField}
-                                required
-                              >
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                              </Form.Control>
-                            </Form.Group>
-                          </Form.Group>
-                        </Modal.Body>
-
-                        <Modal.Footer>
-                          <Button variant="secondary">Close</Button>
-                          <Button
-                            variant="primary"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              this.handleSubmit(movie.imdbID);
-                            }}
-                          >
-                            Submit Commet
-                          </Button>
-                        </Modal.Footer>
-                      </Modal.Dialog>
-                    </Modal>
                   </div>
                 ))}
               </OwlCarousel>
